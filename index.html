@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Kuliner Batam - Giva</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
+        #map { width: 100%; height: 100vh; }
+        .leaflet-popup-content b { color: #d35400; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 1. Inisialisasi Peta (Tengah Batam)
+        var map = L.map('map').setView([1.11, 104.048], 12);
+
+        // 2. Tambahkan Tile Layer (Tampilan Peta Jalan)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // 3. Data Lengkap dari Gambar Giva (Geometry sudah diperbaiki)
+        var dataGiva = {
+          "type": "FeatureCollection",
+          "features": [
+            { "type": "Feature", "properties": { "Nama": "Morning Bakery Batam Centre", "Kat": "Bakery", "Des": "Toko roti populer." }, "geometry": { "type": "Point", "coordinates": [104.0531, 1.1305] } },
+            { "type": "Feature", "properties": { "Nama": "Love Seafood Batam", "Kat": "Seafood", "Des": "Restoran seafood terkenal." }, "geometry": { "type": "Point", "coordinates": [104.0418, 1.1321] } },
+            { "type": "Feature", "properties": { "Nama": "Sei Enam Seafood", "Kat": "Seafood", "Des": "Restoran seafood keluarga." }, "geometry": { "type": "Point", "coordinates": [104.0384, 1.1302] } },
+            { "type": "Feature", "properties": { "Nama": "RM Sederhana Nagoya", "Kat": "Restoran Padang", "Des": "Rumah makan padang terkenal." }, "geometry": { "type": "Point", "coordinates": [104.0121, 1.1465] } },
+            { "type": "Feature", "properties": { "Nama": "Martabak Har", "Kat": "Kuliner", "Des": "Martabak khas Palembang." }, "geometry": { "type": "Point", "coordinates": [104.0135, 1.1459] } },
+            { "type": "Feature", "properties": { "Nama": "Masjid Jabal Arafah Cafe", "Kat": "Kuliner", "Des": "Kafe dekat Masjid." }, "geometry": { "type": "Point", "coordinates": [104.0130, 1.1456] } },
+            { "type": "Feature", "properties": { "Nama": "Golden Prawn Seafood", "Kat": "Seafood", "Des": "Seafood konsep pantai." }, "geometry": { "type": "Point", "coordinates": [104.0402, 1.1570] } },
+            { "type": "Feature", "properties": { "Nama": "Cafe Bengkong Laut", "Kat": "Kuliner", "Des": "Tempat makan santai." }, "geometry": { "type": "Point", "coordinates": [104.0389, 1.1562] } },
+            { "type": "Feature", "properties": { "Nama": "Rezeki Seafood Nongsa", "Kat": "Seafood", "Des": "Seafood segar dekat pantai." }, "geometry": { "type": "Point", "coordinates": [104.1115, 1.1682] } },
+            { "type": "Feature", "properties": { "Nama": "Nongsa Food Court", "Kat": "Kuliner", "Des": "Pusat kuliner lokal." }, "geometry": { "type": "Point", "coordinates": [104.1104, 1.1701] } },
+            { "type": "Feature", "properties": { "Nama": "Harbour Bay Seafood", "Kat": "Seafood", "Des": "Seafood dekat pelabuhan." }, "geometry": { "type": "Point", "coordinates": [104.0021, 1.1620] } },
+            { "type": "Feature", "properties": { "Nama": "Wey Wey Seafood", "Kat": "Seafood", "Des": "Restoran seafood terkenal." }, "geometry": { "type": "Point", "coordinates": [104.0032, 1.1628] } },
+            { "type": "Feature", "properties": { "Nama": "Mie Tarempa Sekupang", "Kat": "Kuliner", "Des": "Mie tarempa khas Riau." }, "geometry": { "type": "Point", "coordinates": [103.9708, 1.1204] } },
+            { "type": "Feature", "properties": { "Nama": "Kedai Kopi Tiam Sekupang", "Kat": "Minuman", "Des": "Kedai kopi lokal." }, "geometry": { "type": "Point", "coordinates": [103.9699, 1.1189] } },
+            { "type": "Feature", "properties": { "Nama": "Ayam Penyet Surabaya", "Kat": "Kuliner", "Des": "Restoran ayam populer." }, "geometry": { "type": "Point", "coordinates": [103.9805, 1.0381] } },
+            { "type": "Feature", "properties": { "Nama": "Warung Nasi Sagulung", "Kat": "Kuliner", "Des": "Warung nasi rumahan." }, "geometry": { "type": "Point", "coordinates": [103.9792, 1.0390] } },
+            { "type": "Feature", "properties": { "Nama": "Warung Makan Batu Aji", "Kat": "Kuliner", "Des": "Kuliner lokal masyarakat." }, "geometry": { "type": "Point", "coordinates": [103.9451, 1.0438] } },
+            { "type": "Feature", "properties": { "Nama": "Kedai Seafood Batu Aji", "Kat": "Seafood", "Des": "Olahan seafood sederhana." }, "geometry": { "type": "Point", "coordinates": [103.9442, 1.0435] } }
+          ]
+        };
+
+        // 4. Masukkan Marker ke Peta
+        L.geoJSON(dataGiva, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(
+                    "<b>" + feature.properties.Nama + "</b><br>" +
+                    "<i>" + feature.properties.Kat + "</i><br><br>" +
+                    feature.properties.Des
+                );
+            }
+        }).addTo(map);
+
+    </script>
+</body>
+</html>
